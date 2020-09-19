@@ -1,0 +1,150 @@
+openapi: 3.0.1
+info:
+  title: Kalah API
+  description: "Kalah Resource API"
+  version: 0.0.1
+  contact:
+    name: Mark Turner
+    email: "mark.turner0@gmail.com"
+servers:
+  - url: http://localhost:8080
+    description: Localhost
+    variables:
+      basePath:
+        default: v1
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        message:
+          type: string
+    KalahGameId:
+      type: object
+      required:
+        - id
+        - url
+      properties:
+        id:
+          type: string
+          example: "1234"
+        url:
+          type: string
+          format: uri
+          example: "http://localhost:8080/game/1234"
+    KalahGame:
+      type: object
+      required:
+        - id
+        - url
+        - status
+      properties:
+        id:
+          type: string
+          example: "1234"
+        url:
+          type: string
+          format: uri
+          example: "http://localhost:8080/game/1234"
+        status:
+          type: array
+          items:
+            type: integer
+            minimum: 0
+          example: "[ 6, 6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 0]"
+  parameters:
+    gameIdParam:
+      name: gameId
+      in: path
+      description: ID in path
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+    pitIdParam:
+      name: pitId
+      in: path
+      description: ID in path
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 14
+  responses:
+    NotFound:
+      description: Resource Not found.
+    BadRequest:
+      description: Bad Request.
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GeneralError'
+
+paths:
+  /games:
+    get:
+      description: Returns all Kalah games ids.
+      responses:
+        '200':
+          description: A list of Kalah game ids.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KalahGameId'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      description: Create a Kalah game.
+      responses:
+        '200':
+          description: The new Kalah.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KalahGameId'
+        default:
+          $ref: '#/components/responses/GeneralError'
+
+  /games/{gameId}:
+    parameters:
+      - $ref: '#/components/parameters/gameIdParam'
+    get:
+      description: Return a Kalah game.
+      responses:
+        '200':
+          description: The requested Kalah game.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KalahGame'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /games/{gameId}/pits/{pitId}:
+    parameters:
+      - $ref: '#/components/parameters/gameIdParam'
+      - $ref: '#/components/parameters/pitIdParam'
+    put:
+      description: Update a Kalah
+      responses:
+        '200':
+          description: The updated Kalah.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KalahGame'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
