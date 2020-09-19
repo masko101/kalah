@@ -7,6 +7,8 @@ package masko.arundotest.kalah.api;
 
 import masko.arundotest.kalah.api.model.KalahGame;
 import masko.arundotest.kalah.api.model.KalahGameId;
+import masko.arundotest.kalah.model.InvalidMoveException;
+import masko.arundotest.kalah.service.GameNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,7 @@ public interface GamesApi {
         produces = { "application/json" }, 
         method = RequestMethod.PUT)
     ResponseEntity<KalahGame> gamesGameIdPitsPitIdPut(@Min(1) @PathVariable("gameId") Integer gameId,
-                                                      @Min(1) @Max(14)  @PathVariable("pitId") Integer pitId);
+                                                      @Min(1) @Max(14)  @PathVariable("pitId") Integer pitId) throws InvalidMoveException, GameNotFoundException;
 
     @RequestMapping(value = "/games",
         produces = { "application/json" }, 

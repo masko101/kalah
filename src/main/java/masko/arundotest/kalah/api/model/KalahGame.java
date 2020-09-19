@@ -24,6 +24,15 @@ public class KalahGame   {
   @Valid
   private List<Integer> status = new ArrayList<Integer>();
 
+  public KalahGame() {
+  }
+
+  public KalahGame(String id, String url, @Valid List<Integer> status) {
+    this.id = id;
+    this.url = url;
+    this.status = status;
+  }
+
   public KalahGame id(String id) {
     this.id = id;
     return this;

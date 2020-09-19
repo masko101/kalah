@@ -17,6 +17,14 @@ public class KalahGameId   {
   @JsonProperty("url")
   private String url = null;
 
+  public KalahGameId() {
+  }
+
+  public KalahGameId(String id, String url) {
+    this.id = id;
+    this.url = url;
+  }
+
   public KalahGameId id(String id) {
     this.id = id;
     return this;
